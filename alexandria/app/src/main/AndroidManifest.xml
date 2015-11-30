@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ScanActivity"
+            android:configChanges="orientation">
+        </activity>
+        <activity
             android:label="@string/title_activity_settings"
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity" >
