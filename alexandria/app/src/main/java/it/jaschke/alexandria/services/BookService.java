@@ -2,11 +2,17 @@ package it.jaschke.alexandria.services;
 
 import android.app.IntentService;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,6 +97,21 @@ public class BookService extends IntentService {
 
         bookEntry.close();
 
+        if(!isNetworkConnected()) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast toast = Toast.makeText(BookService.this,
+                            getString(R.string.no_internet_error_text),
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+
+            return;
+        }
+
+
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String bookJsonString = null;
@@ -130,6 +151,11 @@ public class BookService extends IntentService {
             bookJsonString = buffer.toString();
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error ", e);
+
+            // We got an exception while fetching the json string
+            // It is null or malformed, there is no point in parsing it
+            return;
+
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -230,4 +256,16 @@ public class BookService extends IntentService {
             values= new ContentValues();
         }
     }
- }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
+    }
+
+}
