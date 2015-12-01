@@ -13,7 +13,7 @@ import android.widget.TextView;
 /**
  * Created by yehya khaled on 2/26/2015.
  */
-public class scoresAdapter extends CursorAdapter
+public class ScoresAdapter extends CursorAdapter
 {
     public static final int COL_HOME = 3;
     public static final int COL_AWAY = 4;
@@ -24,9 +24,12 @@ public class scoresAdapter extends CursorAdapter
     public static final int COL_MATCHDAY = 9;
     public static final int COL_ID = 8;
     public static final int COL_MATCHTIME = 2;
-    public double detail_match_id = 0;
+
+    public double detailMatchId = 0;
+
     private String FOOTBALL_SCORES_HASHTAG = "#Football_Scores";
-    public scoresAdapter(Context context,Cursor cursor,int flags)
+
+    public ScoresAdapter(Context context,Cursor cursor,int flags)
     {
         super(context,cursor,flags);
     }
@@ -56,12 +59,12 @@ public class scoresAdapter extends CursorAdapter
                 cursor.getString(COL_AWAY)
         ));
         //Log.v(FetchScoreTask.LOG_TAG,mHolder.home_name.getText() + " Vs. " + mHolder.away_name.getText() +" id " + String.valueOf(mHolder.match_id));
-        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detail_match_id));
+        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detailMatchId));
         LayoutInflater vi = (LayoutInflater) context.getApplicationContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.detail_fragment, null);
         ViewGroup container = (ViewGroup) view.findViewById(R.id.details_fragment_container);
-        if(mHolder.match_id == detail_match_id)
+        if(mHolder.match_id == detailMatchId)
         {
             //Log.v(FetchScoreTask.LOG_TAG,"will insert extraView");
 
@@ -89,6 +92,8 @@ public class scoresAdapter extends CursorAdapter
         }
 
     }
+
+
     public Intent createShareForecastIntent(String ShareText) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
