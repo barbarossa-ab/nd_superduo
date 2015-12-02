@@ -1,5 +1,5 @@
 # nd_superduo
-Superduo project for Android Nanodegree
+<b>Superduo project for Android Nanodegree</b>
 
 There are two apps : 
 Alexandria: A book list and barcode scanner app.
@@ -7,7 +7,7 @@ Football Scores : An app that tracks current and future football matches (soccer
 
 They need improvement according to the following reviews:
 
-User Feedback for Alexandria:
+<b>User Feedback for Alexandria:</b>
 
 Lauren says:
 “I like this app generally, and the speed at which books come up on my phone after I enter the ISBN is awesome. I’m frustrated that the scanning functionality isn’t implemented yet. That would speed up the whole process and make the app way more useful for me.”
@@ -15,7 +15,7 @@ Lauren says:
 Josh says:
 “This app is terrible. They say you can scan books, but that functionality isn’t in the app yet. It also crashed on me when I tried to add the book my sister was reading on the flight to London.”
 
-User Feedback for Football Scores:
+<b>User Feedback for Football Scores:</b>
 
 Your Boss says:
 "It's important to always use an API key when you can. Get your own API key and put it into the strings.xml file."
