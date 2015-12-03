@@ -3,18 +3,19 @@ package barqsoft.footballscores.widget;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import java.util.concurrent.ExecutionException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import barqsoft.footballscores.MainActivity;
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.Utilies;
 import barqsoft.footballscores.data.DatabaseContract;
 
 /**
@@ -31,7 +32,6 @@ public class ScoresRemoteViewsService extends RemoteViewsService {
     public static final int COL_AWAY_GOALS = 7;
     public static final int COL_ID = 8;
     public static final int COL_MATCHDAY = 9;
-
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -56,10 +56,14 @@ public class ScoresRemoteViewsService extends RemoteViewsService {
 
                 Uri scoresUri = DatabaseContract.ScoresTable.buildScoreWithDate();
 
+                Date date = new Date(System.currentTimeMillis());
+                SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+
                 data = getContentResolver().query(scoresUri,
                         null,
                         null,
-                        null,
+                        new String[]{mformat.format(date)},
+//                        new String[]{"2015-12-02"},
                         DatabaseContract.ScoresTable.DATE_COL + " ASC");
 
                 Binder.restoreCallingIdentity(identityToken);
@@ -91,53 +95,25 @@ public class ScoresRemoteViewsService extends RemoteViewsService {
                 RemoteViews views = new RemoteViews(getPackageName(),
                         R.layout.widget_list_item);
 
-//                int weatherId = data.getInt(INDEX_WEATHER_CONDITION_ID);
-//                int weatherArtResourceId = Utility.getIconResourceForWeatherCondition(weatherId);
-//                Bitmap weatherArtImage = null;
-//                if ( !Utility.usingLocalGraphics(DetailWidgetRemoteViewsService.this) ) {
-//                    String weatherArtResourceUrl = Utility.getArtUrlForWeatherCondition(
-//                            DetailWidgetRemoteViewsService.this, weatherId);
-//                    try {
-//                        weatherArtImage = Glide.with(DetailWidgetRemoteViewsService.this)
-//                                .load(weatherArtResourceUrl)
-//                                .asBitmap()
-//                                .error(weatherArtResourceId)
-//                                .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
-//                    } catch (InterruptedException | ExecutionException e) {
-//                        Log.e(LOG_TAG, "Error retrieving large icon from " + weatherArtResourceUrl, e);
-//                    }
-//                }
-//                String description = data.getString(INDEX_WEATHER_DESC);
-//                long dateInMillis = data.getLong(INDEX_WEATHER_DATE);
-//                String formattedDate = Utility.getFriendlyDayString(
-//                        DetailWidgetRemoteViewsService.this, dateInMillis, false);
-//                double maxTemp = data.getDouble(INDEX_WEATHER_MAX_TEMP);
-//                double minTemp = data.getDouble(INDEX_WEATHER_MIN_TEMP);
-//                String formattedMaxTemperature =
-//                        Utility.formatTemperature(DetailWidgetRemoteViewsService.this, maxTemp);
-//                String formattedMinTemperature =
-//                        Utility.formatTemperature(DetailWidgetRemoteViewsService.this, minTemp);
-//                if (weatherArtImage != null) {
-//                    views.setImageViewBitmap(R.id.widget_icon, weatherArtImage);
-//                } else {
-//                    views.setImageViewResource(R.id.widget_icon, weatherArtResourceId);
-//                }
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-//                    setRemoteContentDescription(views, description);
-//                }
-//                views.setTextViewText(R.id.widget_date, formattedDate);
-//                views.setTextViewText(R.id.widget_description, description);
-//                views.setTextViewText(R.id.widget_high_temperature, formattedMaxTemperature);
-//                views.setTextViewText(R.id.widget_low_temperature, formattedMinTemperature);
-//
-//                final Intent fillInIntent = new Intent();
-//                String locationSetting =
-//                        Utility.getPreferredLocation(DetailWidgetRemoteViewsService.this);
-//                Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-//                        locationSetting,
-//                        dateInMillis);
-//                fillInIntent.setData(weatherUri);
-//                views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
+                views.setTextViewText(R.id.matchTime, data.getString(COL_MATCHTIME));
+                views.setTextViewText(R.id.matchTeams, data.getString(COL_HOME)
+                                                        + " - "
+                                                        + data.getString(COL_AWAY));
+
+                views.setTextViewText(R.id.matchScore, Utilies.getScores(
+                        data.getInt(COL_HOME_GOALS), data.getInt(COL_AWAY_GOALS))
+                );
+
+                if(position % 2 == 0) {
+                    views.setInt(R.id.matchInfo, "setBackgroundColor",
+                            getResources().getColor(R.color.white));
+                } else {
+                    views.setInt(R.id.matchInfo, "setBackgroundColor",
+                            getResources().getColor(R.color.light_grey));
+                }
+
+                Intent fillInIntent = new Intent(getApplicationContext(), MainActivity.class);
+                views.setOnClickFillInIntent(R.id.matchInfo, fillInIntent);
 
                 return views;
             }
@@ -149,8 +125,6 @@ public class ScoresRemoteViewsService extends RemoteViewsService {
 
             @Override
             public long getItemId(int position) {
-//                if (data.moveToPosition(position))
-//                    return data.getLong(INDEX_WEATHER_ID);
                 return position;
             }
 

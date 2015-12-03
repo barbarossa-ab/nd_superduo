@@ -1,53 +1,84 @@
 package barqsoft.footballscores.widget;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import barqsoft.footballscores.MainActivity;
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.service.FetchService;
 
 /**
  * Created by barbarossa on 12/1/15.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ScoresWidgetProvider extends AppWidgetProvider {
 
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // update each of the widgets with the remote adapter
-        for (int i = 0; i < appWidgetIds.length; ++i) {
-            // Here we setup the intent which points to the StackViewService which will
-            // provide the views for this collection.
-            Intent intent = new Intent(context, ScoresWidgetIntentService.class);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+    @Override
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
+        super.onReceive(context, intent);
+        if (FetchService.ACTION_DATA_UPDATED.equals(intent.getAction())) {
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                    new ComponentName(context, getClass()));
 
-            // When intents are compared, the extras are ignored, so we need to embed the extras
-            // into the data so that the extras will not be ignored.
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_today_matches);
-            rv.setRemoteAdapter(appWidgetIds[i], R.id.widget_matches_list, intent);
-
-            // The empty view is displayed when the collection has no items. It should be a sibling
-            // of the collection view.
-            rv.setEmptyView(R.id.stack_view, R.id.empty_view);
-
-            // Here we setup the a pending intent template. Individuals items of a collection
-            // cannot setup their own pending intents, instead, the collection as a whole can
-            // setup a pending intent template, and the individual items can set a fillInIntent
-            // to create unique before on an item to item basis.
-            Intent toastIntent = new Intent(context, StackWidgetProvider.class);
-            toastIntent.setAction(StackWidgetProvider.TOAST_ACTION);
-            toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            rv.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent);
-            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_matches_list);
         }
+    }
+
+
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+
+        Intent service_start = new Intent(context, FetchService.class);
+        context.startService(service_start);
+
+        // update each of the widgets with the remote adapter
+        for (int appWidgetId : appWidgetIds) {
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_today_matches);
+
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            views.setOnClickPendingIntent(R.id.widget, pendingIntent);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                setRemoteAdapter(context, views);
+            } else {
+                setRemoteAdapterV11(context, views);
+            }
+
+            Intent clickIntentTemplate = new Intent(context, MainActivity.class);
+            PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(clickIntentTemplate)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setPendingIntentTemplate(R.id.widget_matches_list, clickPendingIntentTemplate);
+
+            views.setEmptyView(R.id.widget_matches_list, R.id.widget_no_matches_text);
+
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+        }
+
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
+        views.setRemoteAdapter(R.id.widget_matches_list,
+                new Intent(context, ScoresRemoteViewsService.class));
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setRemoteAdapterV11(Context context, @NonNull final RemoteViews views) {
+        views.setRemoteAdapter(0, R.id.widget_matches_list,
+                new Intent(context, ScoresRemoteViewsService.class));
     }
 
 }

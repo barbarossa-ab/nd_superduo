@@ -30,6 +30,8 @@ import barqsoft.footballscores.R;
  */
 public class FetchService extends IntentService
 {
+    public static final String ACTION_DATA_UPDATED = "barqsoft.footballscores.ACTION_DATA_UPDATED";
+
     public static final String LOG_TAG = "myFetchService";
     public FetchService()
     {
@@ -121,6 +123,7 @@ public class FetchService extends IntentService
 
 
                 processJSONdata(JSON_data, getApplicationContext(), true);
+
             } else {
                 //Could not Connect
                 Log.d(LOG_TAG, "Could not connect to server.");
@@ -177,7 +180,6 @@ public class FetchService extends IntentService
 
         try {
             JSONArray matches = new JSONObject(JSONdata).getJSONArray(FIXTURES);
-
 
             //ContentValues to be inserted
             Vector<ContentValues> values = new Vector <ContentValues> (matches.length());
@@ -276,6 +278,8 @@ public class FetchService extends IntentService
                     DatabaseContract.BASE_CONTENT_URI,insert_data);
 
             //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
+
+            updateWidgets();
         }
         catch (JSONException e)
         {
@@ -283,5 +287,14 @@ public class FetchService extends IntentService
         }
 
     }
+
+    private void updateWidgets() {
+        Context context = this;
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
+    }
+
 }
 

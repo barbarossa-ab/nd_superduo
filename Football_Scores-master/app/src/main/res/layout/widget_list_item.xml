@@ -12,34 +12,39 @@
         android:id="@+id/matchTime"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="18:45"
+        android:textColor="#000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_weight="0"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         />
 
     <TextView
         android:id="@+id/matchTeams"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Arsenal FC - Barcelona"
+        android:textColor="#000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:gravity="center_horizontal"
+        android:layout_weight="1"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         />
 
     <TextView
         android:id="@+id/matchScore"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="3-1"
+        android:textColor="#000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
+        android:layout_weight="0"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         />
