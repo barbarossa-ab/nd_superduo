@@ -115,6 +115,18 @@ public class ScoresRemoteViewsService extends RemoteViewsService {
                 Intent fillInIntent = new Intent(getApplicationContext(), MainActivity.class);
                 views.setOnClickFillInIntent(R.id.matchInfo, fillInIntent);
 
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                    String matchInfo = getString(R.string.match_detail_content_description_format,
+                            data.getString(COL_MATCHTIME),
+                            data.getString(COL_HOME),
+                            data.getString(COL_AWAY),
+                            Utilies.getScoresContentDescription(ScoresRemoteViewsService.this,
+                                    data.getInt(COL_HOME_GOALS),
+                                    data.getInt(COL_AWAY_GOALS)));
+
+                    views.setContentDescription(R.id.matchInfo, matchInfo);
+                }
+
                 return views;
             }
 

@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/widget_title"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Today's Matches"
+        android:text="@string/today_matches_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

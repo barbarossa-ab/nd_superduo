@@ -62,6 +62,10 @@ public class ScoresWidgetProvider extends AppWidgetProvider {
 
             views.setEmptyView(R.id.widget_matches_list, R.id.widget_no_matches_text);
 
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+//                views.setContentDescription(R.id.widget_matches_list, context.getString(R.string.today_matches_title));
+//            }
+
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
 

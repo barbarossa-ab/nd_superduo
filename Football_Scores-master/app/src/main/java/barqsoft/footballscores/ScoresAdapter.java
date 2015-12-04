@@ -48,6 +48,7 @@ public class ScoresAdapter extends CursorAdapter
     public void bindView(View view, final Context context, Cursor cursor)
     {
         final ViewHolder mHolder = (ViewHolder) view.getTag();
+
         mHolder.home_name.setText(cursor.getString(COL_HOME));
         mHolder.away_name.setText(cursor.getString(COL_AWAY));
         mHolder.date.setText(cursor.getString(COL_MATCHTIME));
@@ -58,15 +59,33 @@ public class ScoresAdapter extends CursorAdapter
         mHolder.away_crest.setImageResource(Utilies.getTeamCrestByTeamName(
                 cursor.getString(COL_AWAY)
         ));
+
+        String matchInfo = context.getString(R.string.match_detail_content_description_format,
+                cursor.getString(COL_MATCHTIME),
+                cursor.getString(COL_HOME),
+                cursor.getString(COL_AWAY),
+                Utilies.getScoresContentDescription(context, cursor.getInt(COL_HOME_GOALS),
+                        cursor.getInt(COL_AWAY_GOALS)));
+
+        view.setContentDescription(matchInfo);
+
         //Log.v(FetchScoreTask.LOG_TAG,mHolder.home_name.getText() + " Vs. " + mHolder.away_name.getText() +" id " + String.valueOf(mHolder.match_id));
         //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detailMatchId));
         LayoutInflater vi = (LayoutInflater) context.getApplicationContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.detail_fragment, null);
         ViewGroup container = (ViewGroup) view.findViewById(R.id.details_fragment_container);
+
         if(mHolder.match_id == detailMatchId)
         {
             //Log.v(FetchScoreTask.LOG_TAG,"will insert extraView");
+
+            String matchExtraInfo = context.getString(R.string.match_detail_extra_content_description_format,
+                    Utilies.getLeague(cursor.getInt(COL_LEAGUE)),
+                    Utilies.getMatchDay(cursor.getInt(COL_MATCHDAY),
+                                    cursor.getInt(COL_LEAGUE)));
+
+            view.setContentDescription(matchInfo + matchExtraInfo);
 
             container.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
                     , ViewGroup.LayoutParams.MATCH_PARENT));

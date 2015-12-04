@@ -1,5 +1,7 @@
 package barqsoft.footballscores;
 
+import android.content.Context;
+
 /**
  * Created by yehya khaled on 3/3/2015.
  */
@@ -20,6 +22,7 @@ public class Utilies
             case CHAMPIONS_LEAGUE : return "UEFA Champions League";
             case PRIMERA_DIVISION : return "Primera Division";
             case BUNDESLIGA : return "Bundesliga";
+
             default: return "Not known League Please report";
         }
     }
@@ -66,6 +69,19 @@ public class Utilies
             return String.valueOf(home_goals) + " - " + String.valueOf(awaygoals);
         }
     }
+
+    public static String getScoresContentDescription(Context context, int home_goals, int awaygoals)
+    {
+        if(home_goals < 0 || awaygoals < 0)
+        {
+            return context.getString(R.string.score_not_available);
+        }
+        else
+        {
+            return String.valueOf(home_goals) + " - " + String.valueOf(awaygoals);
+        }
+    }
+
 
     public static int getTeamCrestByTeamName (String teamname)
     {
