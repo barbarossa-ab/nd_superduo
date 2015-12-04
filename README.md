@@ -31,5 +31,5 @@ Jennie says:
 
 <b>Note:</b>
 Football Scores needs an API key to run.
-You can obtain one from : http://api.football-data.org/register
+You can obtain one from : http://api.football-data.org/register.
 Then put the key into strings.xml (at the "api_key" tag).
