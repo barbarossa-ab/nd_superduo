@@ -19,6 +19,8 @@
         android:paddingBottom="8dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:background="@color/blue01"
         android:textColor="@color/white"
         />

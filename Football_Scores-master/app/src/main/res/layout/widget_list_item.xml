@@ -19,6 +19,8 @@
         android:layout_weight="0"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         />
 
     <TextView
@@ -33,6 +35,8 @@
         android:layout_weight="1"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         />
 
     <TextView
@@ -47,6 +51,8 @@
         android:layout_weight="0"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         />
 
 </LinearLayout>
