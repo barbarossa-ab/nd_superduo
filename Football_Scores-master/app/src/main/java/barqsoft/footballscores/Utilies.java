@@ -7,21 +7,37 @@ import android.content.Context;
  */
 public class Utilies
 {
-    public static final int SERIE_A = 357;
-    public static final int PREMIER_LEGAUE = 354;
-    public static final int CHAMPIONS_LEAGUE = 362;
-    public static final int PRIMERA_DIVISION = 358;
-    public static final int BUNDESLIGA = 351;
+    // This set of league codes is for the 2015/2016 season. In fall of 2016, they will need to
+    // be updated. Feel free to use the codes
+    public static final int BUNDESLIGA1 = 394;
+    public static final int BUNDESLIGA2 = 395;
+    public static final int BUNDESLIGA3 = 403;
+    public static final int LIGUE1 = 396;
+    public static final int LIGUE2 = 397;
+    public static final int PREMIER_LEAGUE = 398;
+    public static final int PRIMERA_DIVISION = 399;
+    public static final int SEGUNDA_DIVISION = 400;
+    public static final int SERIE_A = 401;
+    public static final int PRIMERA_LIGA = 402;
+    public static final int EREDIVISIE = 404;
+    public static final int CHAMPIONS_LEAGUE = 405;
 
-    public static String getLeague(int league_num)
+    public static String getLeague(Context context, int league_num)
     {
         switch (league_num)
         {
-            case SERIE_A : return "Seria A";
-            case PREMIER_LEGAUE : return "Premier League";
-            case CHAMPIONS_LEAGUE : return "UEFA Champions League";
-            case PRIMERA_DIVISION : return "Primera Division";
-            case BUNDESLIGA : return "Bundesliga";
+            case SERIE_A : return context.getString(R.string.seriaa);
+            case PREMIER_LEAGUE : return context.getString(R.string.premierleague);
+            case PRIMERA_DIVISION : return context.getString(R.string.primeradivison);
+            case BUNDESLIGA1 : return context.getString(R.string.bundesliga);
+            case BUNDESLIGA2 : return context.getString(R.string.bundesliga2);
+            case LIGUE1 : return context.getString(R.string.ligue1);
+            case LIGUE2 : return context.getString(R.string.ligue2);
+            case SEGUNDA_DIVISION :return context.getString(R.string.segundadivision);
+            case PRIMERA_LIGA :return context.getString(R.string.primeraliga);
+            case BUNDESLIGA3 :return context.getString(R.string.bundesliga3);
+            case EREDIVISIE :return context.getString(R.string.eredivisie);
+            case CHAMPIONS_LEAGUE :return context.getString(R.string.champions_league);
 
             default: return "Not known League Please report";
         }
