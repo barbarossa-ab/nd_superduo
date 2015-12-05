@@ -32,6 +32,9 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
     private String bookTitle;
     private ShareActionProvider shareActionProvider;
 
+    volatile private boolean loadFinished = false;
+    volatile private boolean bookShared = false;
+
     public BookDetail(){
     }
 
@@ -39,6 +42,9 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        loadFinished = false;
+        bookShared = false;
     }
 
 
@@ -72,6 +78,11 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
         MenuItem menuItem = menu.findItem(R.id.action_share);
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        if(loadFinished && !bookShared) {
+            addShareBookOption();
+            bookShared = true;
+        }
     }
 
     @Override
@@ -96,11 +107,11 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         if(bookTitle != null) {
             ((TextView) rootView.findViewById(R.id.fullBookTitle)).setText(bookTitle);
 
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
-            shareActionProvider.setShareIntent(shareIntent);
+            if(shareActionProvider != null) {
+                addShareBookOption();
+                bookShared = true;
+            }
+            loadFinished = true;
         }
 
         String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
@@ -133,9 +144,9 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
             ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
         }
 
-        if(rootView.findViewById(R.id.right_container) != null){
-            rootView.findViewById(R.id.backButton).setVisibility(View.INVISIBLE);
-        }
+//        if(rootView.findViewById(R.id.right_container) != null){
+//            rootView.findViewById(R.id.backButton).setVisibility(View.INVISIBLE);
+//        }
     }
 
     @Override
@@ -149,5 +160,14 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         if(MainActivity.IS_TABLET && rootView.findViewById(R.id.right_container)==null){
             getActivity().getSupportFragmentManager().popBackStack();
         }
+    }
+
+    private void addShareBookOption() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
+
+        shareActionProvider.setShareIntent(shareIntent);
     }
 }
