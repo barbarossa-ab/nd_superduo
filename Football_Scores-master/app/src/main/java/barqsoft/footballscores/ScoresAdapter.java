@@ -60,7 +60,7 @@ public class ScoresAdapter extends CursorAdapter
                 cursor.getString(COL_AWAY)
         ));
 
-        String matchInfo = context.getString(R.string.match_detail_content_description_format,
+        String matchInfo = context.getString(R.string.cd_match_detail,
                 cursor.getString(COL_MATCHTIME),
                 cursor.getString(COL_HOME),
                 cursor.getString(COL_AWAY),
@@ -80,7 +80,7 @@ public class ScoresAdapter extends CursorAdapter
         {
             //Log.v(FetchScoreTask.LOG_TAG,"will insert extraView");
 
-            String matchExtraInfo = context.getString(R.string.match_detail_extra_content_description_format,
+            String matchExtraInfo = context.getString(R.string.cd_match_detail_extra,
                     Utilies.getLeague(cursor.getInt(COL_LEAGUE)),
                     Utilies.getMatchDay(cursor.getInt(COL_MATCHDAY),
                                     cursor.getInt(COL_LEAGUE)));
