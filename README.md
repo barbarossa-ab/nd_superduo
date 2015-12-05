@@ -28,3 +28,8 @@ Moizeé says:
 
 Jennie says:
 “I like the functionality of this app, but I hate having to open it up every time I want to check for a new game. Can’t you put something on the home screen for us?”
+
+<b>Note:</b>
+Football Scores needs an API key to run.
+You can obtain one from : http://api.football-data.org/register.
+Then put the key into strings.xml (at the "api_key" tag).

@@ -26,6 +26,8 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     private String[] fragmentdate = new String[1];
     private int last_selected_item = -1;
 
+    private String mDay;
+
     public MainScreenFragment()
     {
     }
@@ -40,6 +42,12 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     {
         fragmentdate[0] = date;
     }
+
+    public void setFragmentDay(String day)
+    {
+        mDay = day;
+    }
+
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +73,9 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
                 mAdapter.notifyDataSetChanged();
             }
         });
+
+        rootView.setContentDescription(getString(R.string.cd_page_detail, mDay));
+
         return rootView;
     }
 

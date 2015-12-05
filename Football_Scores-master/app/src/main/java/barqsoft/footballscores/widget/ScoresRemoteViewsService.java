@@ -116,7 +116,7 @@ public class ScoresRemoteViewsService extends RemoteViewsService {
                 views.setOnClickFillInIntent(R.id.matchInfo, fillInIntent);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                    String matchInfo = getString(R.string.match_detail_content_description_format,
+                    String matchInfo = getString(R.string.cd_match_detail,
                             data.getString(COL_MATCHTIME),
                             data.getString(COL_HOME),
                             data.getString(COL_AWAY),
