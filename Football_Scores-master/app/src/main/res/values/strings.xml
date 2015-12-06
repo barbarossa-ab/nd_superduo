@@ -55,5 +55,7 @@
     <string name="cd_match_detail">Match time:%1$s. Home team:%2$s. Away team:%3$s. Score:%4$s.</string>
     <string name="cd_match_detail_extra">League info:%1$s. Matchday info:%2$s.</string>
 
+    <string name="not_known_league">Not known League Please report</string>
+
 
 </resources>

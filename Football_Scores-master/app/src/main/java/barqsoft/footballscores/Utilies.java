@@ -39,11 +39,11 @@ public class Utilies
             case EREDIVISIE :return context.getString(R.string.eredivisie);
             case CHAMPIONS_LEAGUE :return context.getString(R.string.champions_league);
 
-            default: return "Not known League Please report";
+            default: return context.getString(R.string.not_known_league);
         }
     }
 
-    public static String getMatchDay(int match_day,int league_num)
+    public static String getMatchDay(int match_day, int league_num)
     {
         if(league_num == CHAMPIONS_LEAGUE)
         {
@@ -101,7 +101,7 @@ public class Utilies
 
     public static int getTeamCrestByTeamName (String teamname)
     {
-        if (teamname==null){return R.drawable.no_icon;}
+        if (teamname==null){ return R.drawable.no_icon; }
 
         switch (teamname)
         { //This is the set of icons that are currently in the app. Feel free to find and add more
